@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify Email</title>
+  <style>
+    /* Full page center and styling */
+    body, html {
+      height: 100%;
+      margin: 0;
+      background: #282c34;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .container {
+      background: #3b3f51;
+      padding: 30px 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      width: 320px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #f0a500;
+    }
+
+    input[type="email"], input[type="text"], input {
+      width: 100%;
+      padding: 12px 10px;
+      margin: 12px 0 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #f0a500;
+      color: #282c34;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d18e00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Verify Your Email</h2>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="code" type="text" placeholder="Verification Code" />
+    <button onclick="verify()">Verify</button>
+  </div>
+
+  <script>
+    async function verify() {
+      const email = document.getElementById('email').value.trim();
+      const code = document.getElementById('code').value.trim();
+
+      if (!email || !code) {
+        alert('Please enter both email and verification code');
+        return;
+      }
+
+      // Basic email format validation
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:5000/api/auth/verify', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ email, code })
+        });
+        const data = await res.json();
+        alert(data.message || data.error);
+      } catch (err) {
+        alert('Network error, please try again.');
+      }
+    }
+  </script>
+</body>
+</html>

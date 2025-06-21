@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+    /* Full page center and styling */
+    body, html {
+      height: 100%;
+      margin: 0;
+      background: #282c34;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .container {
+      background: #3b3f51;
+      padding: 30px 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      width: 300px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #f0a500;
+    }
+
+    input[type="text"], input[type="password"], input {
+      width: 100%;
+      padding: 12px 10px;
+      margin: 12px 0 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #f0a500;
+      color: #282c34;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d18e00;
+    }
+
+    p {
+      margin-top: 20px;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    p a {
+      color: #f0a500;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    p a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <input id="username" type="text" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p>
+      <a href="signup.html">Create Account</a> | <a href="forgot.html">Forgot Password?</a>
+    </p>
+  </div>
+
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        alert('Please enter both username and password');
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        alert(data.message || data.error);
+      } catch (err) {
+        alert('Network error, please try again.');
+      }
+    }
+  </script>
+</body>
+</html>
